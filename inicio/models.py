@@ -18,3 +18,17 @@ class CitaVeterinaria(models.Model):
 
     def __str__(self):
         return f'{self.nombre_mascota} - {self.nombre_dueno}'
+
+
+class UsuarioPersonalizado(models.Model):
+    nombre = models.CharField(max_length=120, verbose_name='Nombre')
+    rol = models.CharField(max_length=50, verbose_name='Rol')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Usuario Personalizado'
+        verbose_name_plural = 'Usuarios Personalizados'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.nombre} - {self.rol}'
