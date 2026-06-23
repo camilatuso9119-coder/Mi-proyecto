@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Booking(models.Model):
+class CitaVeterinaria(models.Model):
     name = models.CharField(max_length=120, verbose_name='Nombre')
     phone = models.CharField(max_length=30, verbose_name='Teléfono')
     email = models.EmailField(blank=True, verbose_name='Correo')
@@ -11,8 +11,8 @@ class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Reserva'
-        verbose_name_plural = 'Reservas'
+        verbose_name = 'Cita Veterinaria'
+        verbose_name_plural = 'Citas Veterinarias'
         ordering = ['-created_at']
 
     def __str__(self):
