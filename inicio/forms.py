@@ -1,14 +1,14 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Booking
+from .models import CitaVeterinaria
 
 
-class BookingForm(forms.ModelForm):
+class CitaVeterinariaForm(forms.ModelForm):
     class Meta:
-        model = Booking
-        fields = ['name', 'phone', 'email', 'address', 'people', 'date']
+        model = CitaVeterinaria
+        fields = ['nombre_mascota', 'nombre_dueno', 'telefono', 'email', 'direccion', 'tipo_mascota', 'fecha']
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
         }
 
 
