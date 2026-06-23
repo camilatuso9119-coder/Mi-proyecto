@@ -1,0 +1,14 @@
+.btn-primary {
+  background-color: #6f42c1;
+  border-color: #6f42c1;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #5d35a8;
+  border-color: #5d35a8;
+}
+
+.main-logo img {
+  max-height: 58px;
+}
