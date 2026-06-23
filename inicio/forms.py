@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from .models import CitaVeterinaria
+from .models import CitaVeterinaria, UsuarioPersonalizado
 
 
 class CitaVeterinariaForm(forms.ModelForm):
@@ -10,6 +10,12 @@ class CitaVeterinariaForm(forms.ModelForm):
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date'}),
         }
+
+
+class UsuarioPersonalizadoForm(forms.ModelForm):
+    class Meta:
+        model = UsuarioPersonalizado
+        fields = ['nombre', 'rol']
 
 
 class LoginForm(AuthenticationForm):
