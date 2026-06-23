@@ -1,0 +1,328 @@
+{% extends "private/base.html" %}
+{% load static %}
+
+{% block titulo %}Dashboard – Panel Privado{% endblock %}
+
+{% block contenido %}
+<div class="row">
+
+  <!-- Tarjetas widget (diseño Guruable) -->
+  <div class="col-md-6 col-xl-3">
+    <div class="card widget-card-1">
+      <div class="card-block-small">
+        <i class="icofont icofont-calendar bg-c-blue card1-icon"></i>
+        <span class="text-c-blue f-w-600">Reservas</span>
+        <h4>{{ bookings_count }}</h4>
+        <div>
+          <span class="f-left m-t-10 text-muted">
+            <i class="text-c-blue f-16 icofont icofont-ui-calendar m-r-10"></i>Total registradas
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <div class="card widget-card-1">
+      <div class="card-block-small">
+        <i class="icofont icofont-users-alt-5 bg-c-pink card1-icon"></i>
+        <span class="text-c-pink f-w-600">Personas</span>
+        <h4>{{ bookings_people }}</h4>
+        <div>
+          <span class="f-left m-t-10 text-muted">
+            <i class="text-c-pink f-16 icofont icofont-users m-r-10"></i>En todas las reservas
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <div class="card widget-card-1">
+      <div class="card-block-small">
+        <i class="icofont icofont-check-circled bg-c-green card1-icon"></i>
+        <span class="text-c-green f-w-600">Sistema</span>
+        <h4>Activo</h4>
+        <div>
+          <span class="f-left m-t-10 text-muted">
+            <i class="text-c-green f-16 icofont icofont-verification-check m-r-10"></i>Panel operativo
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <div class="card widget-card-1">
+      <div class="card-block-small">
+        <i class="icofont icofont-lock bg-c-yellow card1-icon"></i>
+        <span class="text-c-yellow f-w-600">Zona</span>
+        <h4>Privada</h4>
+        <div>
+          <span class="f-left m-t-10 text-muted">
+            <i class="text-c-yellow f-16 icofont icofont-shield m-r-10"></i>Acceso restringido
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráfico estadísticas -->
+  <div class="col-md-12 col-xl-8">
+    <div class="card">
+      <div class="card-header">
+        <h5>Estadísticas</h5>
+        <div class="card-header-left"></div>
+        <div class="card-header-right">
+          <ul class="list-unstyled card-option">
+            <li><i class="icofont icofont-simple-left"></i></li>
+            <li><i class="icofont icofont-maximize full-card"></i></li>
+            <li><i class="icofont icofont-minus minimize-card"></i></li>
+            <li><i class="icofont icofont-refresh reload-card"></i></li>
+            <li><i class="icofont icofont-error close-card"></i></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-block">
+        <div id="statestics-chart" style="height:517px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tarjetas sociales del tema -->
+  <div class="col-md-12 col-xl-4">
+    <div class="card fb-card">
+      <div class="card-header">
+        <i class="icofont icofont-social-facebook"></i>
+        <div class="d-inline-block">
+          <h5>Reservas</h5>
+          <span>Resumen del panel</span>
+        </div>
+      </div>
+      <div class="card-block text-center">
+        <div class="row">
+          <div class="col-6 b-r-default">
+            <h2>{{ bookings_count }}</h2>
+            <p class="text-muted">Total</p>
+          </div>
+          <div class="col-6">
+            <h2>{{ bookings_people }}</h2>
+            <p class="text-muted">Personas</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card dribble-card">
+      <div class="card-header">
+        <i class="icofont icofont-ui-calendar"></i>
+        <div class="d-inline-block">
+          <h5>Reservas</h5>
+          <span>Gestión activa</span>
+        </div>
+      </div>
+      <div class="card-block text-center">
+        <div class="row">
+          <div class="col-6 b-r-default">
+            <h2>{{ bookings_count }}</h2>
+            <p class="text-muted">Registradas</p>
+          </div>
+          <div class="col-6">
+            <h2>1</h2>
+            <p class="text-muted">Panel</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card twitter-card">
+      <div class="card-header">
+        <i class="icofont icofont-ui-user"></i>
+        <div class="d-inline-block">
+          <h5>Usuario</h5>
+          <span>Sesión actual</span>
+        </div>
+      </div>
+      <div class="card-block text-center">
+        <div class="row">
+          <div class="col-6 b-r-default">
+            <h2>1</h2>
+            <p class="text-muted">Conectado</p>
+          </div>
+          <div class="col-6">
+            <h2>{% if request.user.is_superuser %}Admin{% else %}User{% endif %}</h2>
+            <p class="text-muted">Rol</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de reservas -->
+  <div class="col-md-12 col-xl-12" id="reservas">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <h5>Últimas reservas</h5>
+        </div>
+        <div class="card-header-right">
+          <a href="{% url 'book' %}" class="btn btn-primary btn-sm">
+            <i class="ti-plus"></i> Nueva reserva
+          </a>
+          <ul class="list-unstyled card-option d-inline-block m-l-10">
+            <li><i class="icofont icofont-simple-left"></i></li>
+            <li><i class="icofont icofont-maximize full-card"></i></li>
+            <li><i class="icofont icofont-minus minimize-card"></i></li>
+            <li><i class="icofont icofont-refresh reload-card"></i></li>
+            <li><i class="icofont icofont-error close-card"></i></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-block table-border-style">
+        {% if bookings %}
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Teléfono</th>
+                  <th>Correo</th>
+                  <th>Personas</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for b in bookings %}
+                  <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ b.name }}</td>
+                    <td>{{ b.phone }}</td>
+                    <td>{{ b.email|default:"–" }}</td>
+                    <td>{{ b.people }}</td>
+                    <td>{{ b.date|date:"d/m/Y"|default:"–" }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted m-b-0">
+            No hay reservas registradas aún.
+            <a href="{% url 'book' %}">Crear la primera →</a>
+          </p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de tareas (diseño original del tema) -->
+  <div class="col-md-12 col-xl-6">
+    <div class="card project-task">
+      <div class="card-header">
+        <div class="card-header-left">
+          <h5>Actividad reciente</h5>
+        </div>
+        <div class="card-header-right">
+          <ul class="list-unstyled card-option">
+            <li><i class="icofont icofont-simple-left"></i></li>
+            <li><i class="icofont icofont-maximize full-card"></i></li>
+            <li><i class="icofont icofont-minus minimize-card"></i></li>
+            <li><i class="icofont icofont-refresh reload-card"></i></li>
+            <li><i class="icofont icofont-error close-card"></i></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-block p-b-10">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Reserva</th>
+                <th>Personas</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for b in bookings|slice:":5" %}
+                <tr>
+                  <td>
+                    <div class="task-contain">
+                      <h6 class="bg-c-blue d-inline-block text-center">{{ b.name|slice:":1"|upper }}</h6>
+                      <p class="d-inline-block m-l-20">{{ b.name }}</p>
+                    </div>
+                  </td>
+                  <td>
+                    <p class="d-inline-block m-r-20">{{ b.people }}</p>
+                    <div class="progress d-inline-block">
+                      <div class="progress-bar bg-c-blue" role="progressbar"
+                           style="width:{% widthratio b.people 10 100 %}%"></div>
+                    </div>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="2" class="text-muted">Sin actividad reciente</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12 col-xl-6">
+    <div class="card add-task-card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <h5>Acciones rápidas</h5>
+        </div>
+        <div class="card-header-right">
+          <a href="{% url 'book' %}" class="btn btn-card btn-primary">Nueva reserva</a>
+        </div>
+      </div>
+      <div class="card-block">
+        <div class="to-do-list">
+          <div class="checkbox-fade fade-in-primary d-block">
+            <label class="check-task d-block">
+              <input type="checkbox" checked disabled>
+              <span class="cr">
+                <i class="cr-icon icofont icofont-ui-check txt-default"></i>
+              </span>
+              <span><h6>Panel privado activo</h6></span>
+            </label>
+          </div>
+        </div>
+        <div class="to-do-list">
+          <div class="checkbox-fade fade-in-primary d-block">
+            <label class="check-task d-block">
+              <input type="checkbox" checked disabled>
+              <span class="cr">
+                <i class="cr-icon icofont icofont-ui-check txt-default"></i>
+              </span>
+              <span><h6>Revisar reservas pendientes</h6></span>
+            </label>
+          </div>
+        </div>
+        <div class="to-do-list">
+          <div class="checkbox-fade fade-in-primary d-block">
+            <label class="check-task d-block">
+              <input type="checkbox">
+              <span class="cr">
+                <i class="cr-icon icofont icofont-ui-check txt-default"></i>
+              </span>
+              <span><h6>Ir al sitio público</h6></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block js_extra %}
+<script src="{% static 'private/assets/pages/widget/amchart/amcharts.min.js' %}"></script>
+<script src="{% static 'private/assets/pages/widget/amchart/serial.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'private/assets/pages/todo/todo.js' %}"></script>
+<script type="text/javascript" src="{% static 'private/assets/pages/dashboard/custom-dashboard.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "public/base.html" %}
+{% load static %}
+
+{% block titulo %}Inicio – Mi Proyecto{% endblock %}
+
+{% block contenido %}
+
+  <!-- Preloader -->
+  <div class="preloader-wrapper">
+    <div class="preloader"></div>
+  </div>
+
+  <!-- Hero / Banner -->
+  <section class="banner-section">
+    <div class="container text-center py-5">
+      <h1 class="display-4 fw-bold">Bienvenido a Mi Proyecto</h1>
+      <p class="lead text-muted mb-4">La mejor experiencia para nuestros clientes.</p>
+      <a href="{% url 'book' %}" class="btn btn-primary btn-lg me-2">Hacer una reserva</a>
+      <a href="{% url 'login' %}" class="btn btn-outline-dark btn-lg">Panel privado</a>
+    </div>
+    <div class="text-center">
+      <img src="{% static 'public/images/banner-img.png' %}" alt="Banner" class="img-fluid" style="max-height:420px;">
+    </div>
+  </section>
+
+{% endblock %}
