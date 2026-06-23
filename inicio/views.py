@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from .forms import BookingForm, LoginForm
-from .models import Booking
+from .forms import CitaVeterinariaForm, LoginForm
+from .models import CitaVeterinaria
 
 
 # ─────────────────────────────────────────────
@@ -19,16 +19,16 @@ def inicio(request):
 
 
 def book(request):
-    """Formulario de reserva público."""
+    """Formulario de cita veterinaria público."""
     success = False
     if request.method == 'POST':
-        form = BookingForm(request.POST)
+        form = CitaVeterinariaForm(request.POST)
         if form.is_valid():
             form.save()
             success = True
-            form = BookingForm()
+            form = CitaVeterinariaForm()
     else:
-        form = BookingForm()
+        form = CitaVeterinariaForm()
 
     return render(request, 'public/book.html', {
         'form': form,
@@ -75,13 +75,11 @@ def logout_view(request):
 @login_required
 def dashboard(request):
     """Panel principal privado — usa guruable (private/dashboard.html)."""
-    bookings = Booking.objects.all()
-    stats = Booking.objects.aggregate(
-        bookings_count=Count('id'),
-        bookings_people=Sum('people'),
+    citas = CitaVeterinaria.objects.all()
+    stats = CitaVeterinaria.objects.aggregate(
+        citas_count=Count('id'),
     )
     return render(request, 'private/dashboard.html', {
-        'bookings': bookings,
-        'bookings_count': stats['bookings_count'],
-        'bookings_people': stats['bookings_people'] or 0,
+        'citas': citas,
+        'citas_count': stats['citas_count'],
     })
