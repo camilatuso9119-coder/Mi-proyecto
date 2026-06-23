@@ -1,0 +1,45 @@
+{% extends "private/base.html" %}
+
+{% block titulo %}Eliminar Usuario – Veterinaria Moon{% endblock %}
+
+{% block contenido %}
+<div class="container-fluid">
+  <div class="page-header">
+    <div class="row">
+      <div class="col-lg-6">
+        <h3>Eliminar Usuario</h3>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'lista_usuarios' %}">Usuarios</a></li>
+          <li class="breadcrumb-item active">Eliminar</li>
+        </ol>
+      </div>
+      <div class="col-lg-6 text-right">
+        <a href="{% url 'lista_usuarios' %}" class="btn btn-secondary">
+          <i class="ti-arrow-left"></i> Volver
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8 col-lg-6">
+      <div class="card">
+        <div class="card-header">
+          <h5>Confirmar eliminación</h5>
+        </div>
+        <div class="card-body">
+          <p class="mb-4">
+            ¿Seguro que deseas eliminar al usuario <strong>{{ usuario.nombre }}</strong> con rol <strong>{{ usuario.rol }}</strong>?
+          </p>
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a href="{% url 'lista_usuarios' %}" class="btn btn-secondary">Cancelar</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
