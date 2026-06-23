@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from .forms import CitaVeterinariaForm, LoginForm
-from .models import CitaVeterinaria
+from .forms import CitaVeterinariaForm, LoginForm, UsuarioPersonalizadoForm
+from .models import CitaVeterinaria, UsuarioPersonalizado
 
 
 # ─────────────────────────────────────────────
@@ -83,3 +83,50 @@ def dashboard(request):
         'citas': citas,
         'citas_count': stats['citas_count'],
     })
+
+
+@login_required
+def lista_usuarios(request):
+    """Lista de usuarios personalizados."""
+    usuarios = UsuarioPersonalizado.objects.all()
+    return render(request, 'private/usuarios/lista.html', {'usuarios': usuarios})
+
+
+@login_required
+def crear_usuario(request):
+    """Crear nuevo usuario personalizado."""
+    if request.method == 'POST':
+        form = UsuarioPersonalizadoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Usuario creado exitosamente.')
+            return redirect('lista_usuarios')
+    else:
+        form = UsuarioPersonalizadoForm()
+    return render(request, 'private/usuarios/crear.html', {'form': form})
+
+
+@login_required
+def editar_usuario(request, usuario_id):
+    """Editar usuario personalizado."""
+    usuario = UsuarioPersonalizado.objects.get(id=usuario_id)
+    if request.method == 'POST':
+        form = UsuarioPersonalizadoForm(request.POST, instance=usuario)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Usuario actualizado exitosamente.')
+            return redirect('lista_usuarios')
+    else:
+        form = UsuarioPersonalizadoForm(instance=usuario)
+    return render(request, 'private/usuarios/editar.html', {'form': form, 'usuario': usuario})
+
+
+@login_required
+def eliminar_usuario(request, usuario_id):
+    """Eliminar usuario personalizado."""
+    usuario = UsuarioPersonalizado.objects.get(id=usuario_id)
+    if request.method == 'POST':
+        usuario.delete()
+        messages.success(request, 'Usuario eliminado exitosamente.')
+        return redirect('lista_usuarios')
+    return render(request, 'private/usuarios/eliminar.html', {'usuario': usuario})
