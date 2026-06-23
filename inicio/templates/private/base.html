@@ -172,14 +172,21 @@
                 <li class="{% if request.resolver_match.url_name == 'book' %}active{% endif %}">
                   <a href="{% url 'book' %}">
                     <span class="pcoded-micon"><i class="ti-calendar"></i><b>R</b></span>
-                    <span class="pcoded-mtext">Nueva reserva</span>
+                    <span class="pcoded-mtext">Nueva cita</span>
                     <span class="pcoded-mcaret"></span>
                   </a>
                 </li>
                 <li>
                   <a href="{% url 'dashboard' %}#reservas">
                     <span class="pcoded-micon"><i class="ti-list"></i><b>T</b></span>
-                    <span class="pcoded-mtext">Listado de reservas</span>
+                    <span class="pcoded-mtext">Listado de citas</span>
+                    <span class="pcoded-mcaret"></span>
+                  </a>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'lista_usuarios' or request.resolver_match.url_name == 'crear_usuario' or request.resolver_match.url_name == 'editar_usuario' or request.resolver_match.url_name == 'eliminar_usuario' %}active{% endif %}">
+                  <a href="{% url 'lista_usuarios' %}">
+                    <span class="pcoded-micon"><i class="ti-user"></i><b>U</b></span>
+                    <span class="pcoded-mtext">Usuarios</span>
                     <span class="pcoded-mcaret"></span>
                   </a>
                 </li>
