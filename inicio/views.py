@@ -1,4 +1,4 @@
-from django.db.models import Count, Sum
+from django.db.models import Count
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -74,14 +74,20 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    """Panel principal privado — usa guruable (private/dashboard.html)."""
+    """Panel principal privado."""
     citas = CitaVeterinaria.objects.all()
-    stats = CitaVeterinaria.objects.aggregate(
-        citas_count=Count('id'),
+    citas_count = citas.aggregate(total=Count('id'))['total']
+    duenos_count = (
+        citas.exclude(nombre_dueno='')
+        .values('nombre_dueno')
+        .distinct()
+        .count()
     )
+
     return render(request, 'private/dashboard.html', {
         'citas': citas,
-        'citas_count': stats['citas_count'],
+        'citas_count': citas_count,
+        'duenos_count': duenos_count,
     })
 
 
