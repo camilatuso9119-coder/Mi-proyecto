@@ -6,13 +6,13 @@
 {% block contenido %}
 <div class="row">
 
-  <!-- Tarjetas widget (diseño Guruable) -->
+  <!-- Tarjetas widget -->
   <div class="col-md-6 col-xl-3">
     <div class="card widget-card-1">
       <div class="card-block-small">
         <i class="icofont icofont-calendar bg-c-blue card1-icon"></i>
-        <span class="text-c-blue f-w-600">Reservas</span>
-        <h4>{{ bookings_count }}</h4>
+        <span class="text-c-blue f-w-600">Citas</span>
+        <h4>{{ citas_count }}</h4>
         <div>
           <span class="f-left m-t-10 text-muted">
             <i class="text-c-blue f-16 icofont icofont-ui-calendar m-r-10"></i>Total registradas
@@ -26,11 +26,11 @@
     <div class="card widget-card-1">
       <div class="card-block-small">
         <i class="icofont icofont-users-alt-5 bg-c-pink card1-icon"></i>
-        <span class="text-c-pink f-w-600">Personas</span>
-        <h4>{{ bookings_people }}</h4>
+        <span class="text-c-pink f-w-600">Dueños</span>
+        <h4>{{ duenos_count }}</h4>
         <div>
           <span class="f-left m-t-10 text-muted">
-            <i class="text-c-pink f-16 icofont icofont-users m-r-10"></i>En todas las reservas
+            <i class="text-c-pink f-16 icofont icofont-users m-r-10"></i>Con citas registradas
           </span>
         </div>
       </div>
@@ -95,19 +95,19 @@
       <div class="card-header">
         <i class="icofont icofont-social-facebook"></i>
         <div class="d-inline-block">
-          <h5>Reservas</h5>
+          <h5>Citas</h5>
           <span>Resumen del panel</span>
         </div>
       </div>
       <div class="card-block text-center">
         <div class="row">
           <div class="col-6 b-r-default">
-            <h2>{{ bookings_count }}</h2>
+            <h2>{{ citas_count }}</h2>
             <p class="text-muted">Total</p>
           </div>
           <div class="col-6">
-            <h2>{{ bookings_people }}</h2>
-            <p class="text-muted">Personas</p>
+            <h2>{{ duenos_count }}</h2>
+            <p class="text-muted">Dueños</p>
           </div>
         </div>
       </div>
@@ -116,19 +116,19 @@
       <div class="card-header">
         <i class="icofont icofont-ui-calendar"></i>
         <div class="d-inline-block">
-          <h5>Reservas</h5>
+          <h5>Citas</h5>
           <span>Gestión activa</span>
         </div>
       </div>
       <div class="card-block text-center">
         <div class="row">
           <div class="col-6 b-r-default">
-            <h2>{{ bookings_count }}</h2>
+            <h2>{{ citas_count }}</h2>
             <p class="text-muted">Registradas</p>
           </div>
           <div class="col-6">
-            <h2>1</h2>
-            <p class="text-muted">Panel</p>
+            <h2>{{ citas|length }}</h2>
+            <p class="text-muted">Visibles</p>
           </div>
         </div>
       </div>
@@ -156,16 +156,16 @@
     </div>
   </div>
 
-  <!-- Tabla de reservas -->
+  <!-- Tabla de citas -->
   <div class="col-md-12 col-xl-12" id="reservas">
     <div class="card">
       <div class="card-header">
         <div class="card-header-left">
-          <h5>Últimas reservas</h5>
+          <h5>Últimas citas</h5>
         </div>
         <div class="card-header-right">
           <a href="{% url 'book' %}" class="btn btn-primary btn-sm">
-            <i class="ti-plus"></i> Nueva reserva
+            <i class="ti-plus"></i> Nueva cita
           </a>
           <ul class="list-unstyled card-option d-inline-block m-l-10">
             <li><i class="icofont icofont-simple-left"></i></li>
@@ -177,28 +177,30 @@
         </div>
       </div>
       <div class="card-block table-border-style">
-        {% if bookings %}
+        {% if citas %}
           <div class="table-responsive">
             <table class="table table-hover">
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Nombre</th>
+                  <th>Mascota</th>
+                  <th>Dueño</th>
                   <th>Teléfono</th>
                   <th>Correo</th>
-                  <th>Personas</th>
+                  <th>Tipo</th>
                   <th>Fecha</th>
                 </tr>
               </thead>
               <tbody>
-                {% for b in bookings %}
+                {% for cita in citas %}
                   <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ b.name }}</td>
-                    <td>{{ b.phone }}</td>
-                    <td>{{ b.email|default:"–" }}</td>
-                    <td>{{ b.people }}</td>
-                    <td>{{ b.date|date:"d/m/Y"|default:"–" }}</td>
+                    <td>{{ cita.nombre_mascota }}</td>
+                    <td>{{ cita.nombre_dueno }}</td>
+                    <td>{{ cita.telefono }}</td>
+                    <td>{{ cita.email|default:"–" }}</td>
+                    <td>{{ cita.tipo_mascota }}</td>
+                    <td>{{ cita.fecha|date:"d/m/Y"|default:"–" }}</td>
                   </tr>
                 {% endfor %}
               </tbody>
@@ -206,7 +208,7 @@
           </div>
         {% else %}
           <p class="text-muted m-b-0">
-            No hay reservas registradas aún.
+            No hay citas registradas aún.
             <a href="{% url 'book' %}">Crear la primera →</a>
           </p>
         {% endif %}
@@ -236,25 +238,23 @@
           <table class="table table-hover">
             <thead>
               <tr>
-                <th>Reserva</th>
-                <th>Personas</th>
+                <th>Mascota</th>
+                <th>Detalle</th>
               </tr>
             </thead>
             <tbody>
-              {% for b in bookings|slice:":5" %}
+              {% for cita in citas|slice:":5" %}
                 <tr>
                   <td>
                     <div class="task-contain">
-                      <h6 class="bg-c-blue d-inline-block text-center">{{ b.name|slice:":1"|upper }}</h6>
-                      <p class="d-inline-block m-l-20">{{ b.name }}</p>
+                      <h6 class="bg-c-blue d-inline-block text-center">{{ cita.nombre_mascota|slice:":1"|upper }}</h6>
+                      <p class="d-inline-block m-l-20">{{ cita.nombre_mascota }}</p>
                     </div>
                   </td>
                   <td>
-                    <p class="d-inline-block m-r-20">{{ b.people }}</p>
-                    <div class="progress d-inline-block">
-                      <div class="progress-bar bg-c-blue" role="progressbar"
-                           style="width:{% widthratio b.people 10 100 %}%"></div>
-                    </div>
+                    <p class="d-inline-block m-r-20 mb-0">
+                      {{ cita.nombre_dueno }}{% if cita.fecha %} · {{ cita.fecha|date:"d/m/Y" }}{% endif %}
+                    </p>
                   </td>
                 </tr>
               {% empty %}
@@ -276,7 +276,7 @@
           <h5>Acciones rápidas</h5>
         </div>
         <div class="card-header-right">
-          <a href="{% url 'book' %}" class="btn btn-card btn-primary">Nueva reserva</a>
+          <a href="{% url 'book' %}" class="btn btn-card btn-primary">Nueva cita</a>
         </div>
       </div>
       <div class="card-block">
@@ -298,18 +298,18 @@
               <span class="cr">
                 <i class="cr-icon icofont icofont-ui-check txt-default"></i>
               </span>
-              <span><h6>Revisar reservas pendientes</h6></span>
+              <span><h6>Revisar citas registradas</h6></span>
             </label>
           </div>
         </div>
         <div class="to-do-list">
           <div class="checkbox-fade fade-in-primary d-block">
             <label class="check-task d-block">
-              <input type="checkbox">
+              <input type="checkbox" checked disabled>
               <span class="cr">
                 <i class="cr-icon icofont icofont-ui-check txt-default"></i>
               </span>
-              <span><h6>Ir al sitio público</h6></span>
+              <span><h6>Ir a la gestión de usuarios</h6></span>
             </label>
           </div>
         </div>
