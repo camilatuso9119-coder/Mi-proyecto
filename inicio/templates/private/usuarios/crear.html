@@ -1,0 +1,56 @@
+{% extends "private/base.html" %}
+
+{% block titulo %}Crear Usuario – Veterinaria Moon{% endblock %}
+
+{% block contenido %}
+<div class="container-fluid">
+  <div class="page-header">
+    <div class="row">
+      <div class="col-lg-6">
+        <h3>Crear Nuevo Usuario</h3>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'lista_usuarios' %}">Usuarios</a></li>
+          <li class="breadcrumb-item active">Crear</li>
+        </ol>
+      </div>
+      <div class="col-lg-6 text-right">
+        <a href="{% url 'lista_usuarios' %}" class="btn btn-secondary">
+          <i class="ti-arrow-left"></i> Volver
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Formulario de Usuario</h5>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="{{ form.nombre.id_for_label }}">Nombre</label>
+              {{ form.nombre }}
+              {% if form.nombre.errors %}
+                <div class="text-danger small mt-1">{{ form.nombre.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="{{ form.rol.id_for_label }}">Rol</label>
+              {{ form.rol }}
+              {% if form.rol.errors %}
+                <div class="text-danger small mt-1">{{ form.rol.errors }}</div>
+              {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+            <a href="{% url 'lista_usuarios' %}" class="btn btn-secondary">Cancelar</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
